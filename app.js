@@ -9,7 +9,10 @@ var usersRouter = require('./routes/users');
 
 const http = require('http');
 
+require('dotenv').config();
+
 var app = express();
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -33,10 +36,11 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ error: err });
 });
 
-const server = http.createServer(app);
-server.listen(5000, () => {
-  console.log('Server is running on port 5000');
+const server = http.createServer(app); 
+
+server.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
