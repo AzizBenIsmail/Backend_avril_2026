@@ -27,10 +27,8 @@ const userSchema = new mongoose.Schema(
     experience: String,
 
     cars: [{ type: mongoose.Schema.Types.ObjectId, ref: "Car" }],
-    car: { type: mongoose.Schema.Types.ObjectId, ref: "Car" },
+    // car: { type: mongoose.Schema.Types.ObjectId, ref: "Car" },
     
-    student: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
-    teacher: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
   },
   { timestamps: true },
 );

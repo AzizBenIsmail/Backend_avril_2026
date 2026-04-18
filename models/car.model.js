@@ -16,7 +16,7 @@ const carSchema = new mongoose.Schema(
     disponible: { type: Boolean, default: true },
 
     owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    owners: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    // owners: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true },
 );

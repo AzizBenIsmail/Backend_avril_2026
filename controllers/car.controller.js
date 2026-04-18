@@ -1,4 +1,5 @@
 const carModel = require("../models/car.model");
+const userModel = require("../models/user.model");
 
 module.exports.getAllCars = async (req, res) => {
   try {
@@ -72,9 +73,35 @@ module.exports.deleteCar = async (req, res) => {
 
 module.exports.getAvailableCars = async (req, res) => {
   try {
-    const cars = await carModel.find({ disponible: true }).populate('proprietaire', 'nom prenom email');
+    const cars = await carModel.find({ disponible: true })
     res.status(200).json({ message: "Voitures disponibles récupérées", cars });
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la récupération des voitures disponibles", error: error.message });
   }
 };
+
+module.exports.addCarToUser = async (req, res) => {
+  try {
+    const { userId, carId } = req.params;
+    const car = await carModel.findById(carId);
+    if (!car) {
+      return res.status(404).json({ message: "Voiture non trouvée" });
+    }
+    
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    car.owner = userId;
+    await car.save();
+
+    user.cars.push(carId);
+    await user.save();
+
+    res.status(200).json({ message: "Voiture associée à l'utilisateur avec succès", car });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de l'association de la voiture à l'utilisateur", error: error.message });
+  }
+};
+
+module.exports.removeCarFromUser = async (req, res) => {
