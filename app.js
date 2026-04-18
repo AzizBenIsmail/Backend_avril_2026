@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const { connectToMongoDB } = require('./config/mongo.connection');
+const cors = require("cors");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users.routes');
@@ -16,6 +17,16 @@ require('dotenv').config();
 var app = express();
 
 
+// CORS Configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || "*",
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
