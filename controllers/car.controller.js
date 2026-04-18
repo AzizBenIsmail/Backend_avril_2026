@@ -105,3 +105,22 @@ module.exports.addCarToUser = async (req, res) => {
 };
 
 module.exports.removeCarFromUser = async (req, res) => {
+  try {
+    const { userId, carId } = req.params;
+    const car = await carModel.findById(carId);
+    if (!car) {
+      return res.status(404).json({ message: "Voiture non trouvée" });
+    }
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    car.owner = null;
+    await car.save();
+    user.cars.push(carId);
+    await user.save();
+    res.status(200).json({ message: "Voiture dissociée de l'utilisateur avec succès", car });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la dissociation de la voiture de l'utilisateur", error: error.message });
+  }
+};
