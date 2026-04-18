@@ -93,3 +93,20 @@ module.exports.updateUser = async (req, res) => {
       .json({ message: "Error updating user", error: error.message });
   }
 };
+
+module.exports.addUserClientWithImg = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const image_user = req.file ? req.file.path : null;
+
+
+    const newUser = new usermodel({ email, password ,image_user });
+    await newUser.save();
+
+    res.status(201).json({ message: "User added successfully", user: newUser });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error adding user", error: error.message });
+  }
+};
