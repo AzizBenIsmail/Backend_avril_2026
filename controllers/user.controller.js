@@ -154,3 +154,8 @@ module.exports.login = async (req, res) => {
     res.status(400).json({ message: "Login failed", error: error.message });
   } 
 };
+
+module.exports.logout = (req, res) => {
+  res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
+  res.status(200).json({ message: "Logout successful" });
+};

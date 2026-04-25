@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const { connectToMongoDB } = require('./config/mongo.connection');
 const cors = require("cors");
-
+const authLogMiddleware = require('./middleware/logsMiddlewares');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users.routes');
 var carsRouter = require('./routes/cars.routes');
@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(authLogMiddleware); // Appliquer le middleware de logs à toutes les routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/cars', carsRouter);

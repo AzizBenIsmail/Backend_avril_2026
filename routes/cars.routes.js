@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const carController = require('../controllers/car.controller');
 const upload = require('../middleware/uploadfile');
+const {requireAuthUser} = require('../middleware/authMiddlewares')
 
+router.use(requireAuthUser); // Appliquer le middleware d'authentification à toutes les routes de ce routeur
 // Routes CRUD pour les voitures
 
 // GET /cars - Récupérer toutes les voitures
