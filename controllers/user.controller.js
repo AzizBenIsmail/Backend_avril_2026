@@ -136,3 +136,13 @@ module.exports.deleteUser = async (req, res) => {
         
   }
 };
+
+module.exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await usermodel.login(email, password);
+    res.status(200).json({ message: "Login successful", user });
+  } catch (error) {
+    res.status(400).json({ message: "Login failed", error: error.message });
+  } 
+};
