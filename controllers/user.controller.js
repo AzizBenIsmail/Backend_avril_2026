@@ -137,11 +137,19 @@ module.exports.deleteUser = async (req, res) => {
   }
 };
 
+const jwt = require("jsonwebtoken");
+
+const createToken = (id) => {
+  return jwt.sign({ id }, "net secret", { expiresIn: 1 * 60 });
+};
+
 module.exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await usermodel.login(email, password);
-    res.status(200).json({ message: "Login successful", user });
+    const token = createToken(user._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge: 1 * 60 * 1000 });
+    res.status(200).json({ message: "Login successful", user, token });
   } catch (error) {
     res.status(400).json({ message: "Login failed", error: error.message });
   } 
